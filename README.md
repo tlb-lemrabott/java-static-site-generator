@@ -1,6 +1,6 @@
 # Java Static Site Generator
 
-A Spring Boot application that converts JSON site descriptions into static HTML websites.
+A Java/SpringBoot application that generates static websites based on user-provided JSON descriptions, using Spring Boot and Thymeleaf.
 
 ## What it does
 - Takes JSON input → Generates HTML pages using Thymeleaf templates
