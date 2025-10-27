@@ -35,7 +35,7 @@ Upload your JSON file via form-data:
 file = site-description.json
 
 Output Folder:
-
+```bash
 output/
  └── MyPortfolio/
       ├── index.html
@@ -44,3 +44,4 @@ output/
       │    ├── styles.css
       │    └── script.js
       └── config.json
+```
