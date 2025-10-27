@@ -12,6 +12,11 @@ A Java/SpringBoot application that generates static websites based on user-provi
 - Thymeleaf
 - Maven
 
+| Module | Description |
+|---------|--------------|
+| 🧩 **site-generator** | Generates static HTML pages from a JSON input file |
+| 🌐 **site-builder** | Builds or serves the generated static site for deployment or preview |
+
 ## Quick Start
 
 1. **Clone & Build**
