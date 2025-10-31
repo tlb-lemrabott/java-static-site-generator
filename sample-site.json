@@ -1,0 +1,61 @@
+{
+  "siteName": "MyPortfolio",
+  "pages": [
+    {
+      "title": "Home",
+      "slug": "index",
+      "sections": [
+        {
+          "type": "hero",
+          "heading": "Welcome to My Portfolio!",
+          "text": "I'm a passionate software developer with expertise in Java, Spring Boot, and modern web technologies."
+        },
+        {
+          "type": "skills",
+          "items": ["Java", "Spring Boot", "Thymeleaf", "Maven", "Git", "Docker", "AWS"]
+        },
+        {
+          "type": "about",
+          "text": "I have 10+ years of experience in software development, specializing in enterprise applications and microservices architecture."
+        }
+      ]
+    },
+    {
+      "title": "Contact",
+      "slug": "contact",
+      "sections": [
+        {
+          "type": "form",
+          "fields": ["name", "email", "message"]
+        },
+        {
+          "type": "contact",
+          "content": {
+            "email": "contact@example.com",
+            "phone": "+1 (555) 123-4567",
+            "location": "San Francisco, CA"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Projects",
+      "slug": "projects",
+      "sections": [
+        {
+          "type": "text",
+          "heading": "Featured Projects",
+          "text": "Here are some of my recent projects that showcase my technical skills and problem-solving abilities."
+        },
+        {
+          "type": "image",
+          "heading": "Project Screenshot",
+          "content": {
+            "src": "https://via.placeholder.com/800x400/007bff/ffffff?text=Project+Screenshot",
+            "alt": "Project Screenshot"
+          }
+        }
+      ]
+    }
+  ]
+}

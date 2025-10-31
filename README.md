@@ -1,69 +1,291 @@
 # Java Static Site Generator
 
-A Java/SpringBoot application that generates static websites based on user-provided JSON descriptions, using Spring Boot and Thymeleaf.
+A professional-grade Java/SpringBoot application that generates static websites from JSON descriptions using Spring Boot, Thymeleaf, and enterprise design patterns.
 
-## What it does
-- Takes JSON input → Generates HTML pages using Thymeleaf templates
-- Builds deployable static sites ready for hosting
+## 🚀 Features
 
-## Tech Stack
-- Java 17+
-- Spring Boot 3+
-- Thymeleaf
-- Maven
+- **JSON-Driven**: Define your entire website structure in a simple JSON file
+- **Template Engine**: Uses Thymeleaf for flexible HTML generation
+- **Multiple Section Types**: Support for hero, skills, forms, contact, and more
+- **Optimization**: Automatic CSS/JS minification and optimization
+- **Multi-Platform Deployment**: Generates configs for GitHub Pages, Netlify, Vercel, Apache
+- **RESTful API**: Clean REST endpoints for integration
+- **Enterprise Architecture**: Follows SOLID principles, separation of concerns, and design patterns
 
-| Module | Description |
-|---------|--------------|
-| 🧩 **site-generator** | Generates static HTML pages from a JSON input file |
-| 🌐 **site-builder** | Builds or serves the generated static site for deployment or preview |
+## 🏗️ Architecture
 
-## Quick Start
+| Module | Description | Port |
+|---------|--------------|------|
+| 🧩 **site-generator** | Generates static HTML pages from JSON input | 8080 |
+| 🌐 **site-builder** | Packages and optimizes sites for deployment | 8081 |
 
-1. **Clone & Build**
+## 🛠️ Tech Stack
+
+- **Java 17+**
+- **Spring Boot 3+**
+- **Thymeleaf** (Template Engine)
+- **Jackson** (JSON Processing)
+- **Maven** (Build Tool)
+- **Jakarta Validation** (Input Validation)
+
+## 📋 Prerequisites
+
+- Java 17 or higher
+- Maven 3.6+
+- Git
+
+## 🚀 Quick Start
+
+### 1. Clone and Build
+
 ```bash
-git clone https://github.com/yourusername/static-site-generator.git
-cd static-site-generator
+git clone <repository-url>
+cd static-site-generator-app
 
-# Build generator service
-cd generator-service && mvn clean package
-
-# Build builder service  
-cd ../builder-service && mvn clean package
+# Build both services
+cd site-generator && mvn clean package
+cd ../site-builder && mvn clean package
 ```
 
-2. **Run Generator Service**
-```bash
-java -jar generator-service/target/generator-service.jar
-```
-Upload your JSON file via `POST /api/generate` at `http://localhost:8080`
+### 2. Run Services
 
-3. **Run Builder Service**
+**Terminal 1 - Site Generator:**
 ```bash
-java -jar builder-service/target/builder-service.jar
+cd site-generator
+java -jar target/site-generator-0.0.1-SNAPSHOT.jar
 ```
-Build your site via `GET /api/build?siteName=YourSiteName` at `http://localhost:8081`
 
-## JSON Input Example
+**Terminal 2 - Site Builder:**
+```bash
+cd site-builder
+java -jar target/site-builder-0.0.1-SNAPSHOT.jar
+```
+
+### 3. Generate Your First Site
+
+**Option A: Using JSON in Request Body**
+```bash
+curl -X POST http://localhost:8080/api/generate/json \
+  -H "Content-Type: application/json" \
+  -d @sample-site.json
+```
+
+**Option B: Using File Upload**
+```bash
+curl -X POST http://localhost:8080/api/generate \
+  -F "file=@sample-site.json"
+```
+
+### 4. Build for Deployment
+
+```bash
+curl "http://localhost:8081/api/build?siteName=MyPortfolio"
+```
+
+## 📝 JSON Schema
+
+### Site Structure
 ```json
 {
-  "siteName": "MySite",
+  "siteName": "string (required, 1-100 chars)",
   "pages": [
     {
-      "title": "Home",
-      "slug": "index",
+      "title": "string (required, 1-200 chars)",
+      "slug": "string (required, lowercase, numbers, hyphens only)",
       "sections": [
-        {"type": "hero", "heading": "Welcome!", "text": "Hello World"}
+        {
+          "type": "string (required, see supported types below)",
+          "heading": "string (optional)",
+          "text": "string (optional)",
+          "items": ["array of strings (optional)"],
+          "fields": ["array of strings (optional)"],
+          "content": {"key": "value object (optional)"}
+        }
       ]
     }
   ]
 }
 ```
 
-## Output
-- Generator creates: `/output/MySite/` with HTML files
-- Builder creates: `/build/MySite/` ready for deployment
+### Supported Section Types
 
-Deploy `/build/MySite/` to any static host (GitHub Pages, Netlify, S3).
+| Type | Description | Required Fields | Optional Fields |
+|------|-------------|----------------|-----------------|
+| `hero` | Hero banner section | - | `heading`, `text` |
+| `skills` | Skills list | - | `items` |
+| `form` | Contact form | - | `fields` |
+| `text` | Text content | - | `heading`, `text` |
+| `contact` | Contact information | - | `content` |
+| `about` | About section | - | `text` |
+| `image` | Image display | - | `heading`, `content` |
+
+### Example JSON
+```json
+{
+  "siteName": "MyPortfolio",
+  "pages": [
+    {
+      "title": "Home",
+      "slug": "index",
+      "sections": [
+        {
+          "type": "hero",
+          "heading": "Welcome to My Portfolio!",
+          "text": "I'm a passionate software developer."
+        },
+        {
+          "type": "skills",
+          "items": ["Java", "Spring Boot", "Thymeleaf", "Maven"]
+        }
+      ]
+    },
+    {
+      "title": "Contact",
+      "slug": "contact",
+      "sections": [
+        {
+          "type": "form",
+          "fields": ["name", "email", "message"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 🔌 API Endpoints
+
+### Site Generator (Port 8080)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/generate` | Generate site from uploaded JSON file |
+| `POST` | `/api/generate/json` | Generate site from JSON in request body |
+| `GET` | `/api/health` | Health check |
+| `GET` | `/api/section-types` | Get supported section types |
+
+### Site Builder (Port 8081)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/build` | Build site for deployment |
+| `GET` | `/api/sites` | List available sites |
+| `GET` | `/api/status/{siteName}` | Get build status |
+| `GET` | `/api/health` | Health check |
+| `GET` | `/api/deployment-info` | Get deployment options |
+
+## 📁 Output Structure
+
+### Generated Site (`/output/SiteName/`)
+```
+MyPortfolio/
+├── index.html
+├── contact.html
+├── assets/
+│   ├── styles.css
+│   └── script.js
+└── config.json
+```
+
+### Built Site (`/build/SiteName/`)
+```
+MyPortfolio/
+├── index.html
+├── contact.html
+├── assets/
+│   ├── styles.css (minified)
+│   └── script.js (minified)
+├── .htaccess (Apache config)
+├── netlify.toml (Netlify config)
+└── README.md (Deployment instructions)
+```
+
+## 🚀 Deployment Options
+
+### GitHub Pages
+1. Push built site to GitHub repository
+2. Enable GitHub Pages in repository settings
+3. Select source as "Deploy from a branch"
+
+### Netlify
+1. Drag and drop build directory to Netlify
+2. Or connect your GitHub repository
+3. Set build command to empty (already built)
+
+### Vercel
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run `vercel` in build directory
+3. Follow the prompts
+
+### Apache/Nginx
+1. Upload all files to your web server
+2. Configure web server to serve static files
+3. Use included `.htaccess` file for Apache
+
+## 🧪 Testing
+
+Run the test suite:
+```bash
+# Site Generator Tests
+cd site-generator && mvn test
+
+# Site Builder Tests
+cd site-builder && mvn test
+```
+
+## 🏗️ Architecture Patterns
+
+This project follows enterprise-grade design patterns:
+
+- **Domain-Driven Design (DDD)**: Clear domain models and boundaries
+- **Service Layer Pattern**: Business logic separation
+- **Repository Pattern**: Data access abstraction
+- **DTO Pattern**: Data transfer objects for API communication
+- **Factory Pattern**: Template generation
+- **Strategy Pattern**: Different section type handling
+- **SOLID Principles**: Single responsibility, open/closed, etc.
+
+## 🔧 Configuration
+
+### Site Generator (`application.properties`)
+```properties
+server.port=8080
+site.generator.output.path=output
+spring.thymeleaf.cache=false
+spring.servlet.multipart.max-file-size=10MB
+```
+
+### Site Builder (`application.properties`)
+```properties
+server.port=8081
+site.builder.input.path=output
+site.builder.build.path=build
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Lemrabott Toulba** - *Senior Java Developer*
 
 ---
-**Author:** Lemrabott Toulba | **License:** MIT
+
+## 🎯 Next Steps
+
+- [ ] Add more section types (gallery, timeline, testimonials)
+- [ ] Implement theme system
+- [ ] Add image optimization
+- [ ] Create web UI for site generation
+- [ ] Add CI/CD pipeline
+- [ ] Implement caching strategies
+- [ ] Add internationalization support
